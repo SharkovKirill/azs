@@ -1,0 +1,107 @@
+"""
+Developers:
+"""
+import random
+
+
+max_all_places = {}
+types_of_gaz = {}
+with open('azs.txt') as azs:
+    lst_azs = azs.readlines()
+
+
+for num in range(len(lst_azs)):
+    x = lst_azs[num].split()
+    max_all_places[num+1]=int(x[1])
+    for i in range(2, len(x)):
+        if x[i] not in types_of_gaz.keys():
+            types_of_gaz[x[i]] = [num+1]
+        elif x[i] in types_of_gaz.keys():
+            types_of_gaz.get(x[i]).append(num + 1)
+
+
+current_places = {}
+for i in range(len(max_all_places)):
+   current_places[i+1] = 0
+
+
+
+with open('input.txt') as clients:
+    lst_clients = clients.readlines()
+
+print(current_places)
+print(max_all_places)
+print(types_of_gaz)
+
+future_leaving = []
+
+def table(current_places,max_all_places,types_of_gaz):
+    for i in range(1,len(current_places)+1):
+        az=''
+        for key in types_of_gaz.keys():
+            if i in types_of_gaz.get(key):
+                az = az + ' ' + key
+        print('Автомат №{}  максимальная очередь: {} Марки бензина: {}'.format(i, max_all_places.get(i), az))
+
+for client in range(len(lst_clients)):
+    cl = lst_clients[client].split()
+    time = int(cl[0][:2])*60 + int(cl[0][3:5])
+
+    if len(future_leaving) > 0:
+        try:
+            while future_leaving[0][0] <= time:
+                ti = future_leaving[0][0]//60
+                tii = future_leaving[0][1]//60
+
+                current_places[future_leaving[0][5]] -= 1
+                print('В {}:{} клиент {}:{} {} {} {} заправил свой автомобиль и покинул азс.'.format(  str(ti),
+                str(future_leaving[0][0] - ti*60), str(tii), str(future_leaving[0][1] - tii*60), future_leaving[0][2],
+                str(future_leaving[0][3]), str(future_leaving[0][4])))
+                table(current_places,max_all_places,types_of_gaz)
+                future_leaving.pop(0)
+        except:
+            None
+
+
+    mi = -1 #для проверки прохождения for на первый раз
+    changed_azs = -1
+    for i in range(len(types_of_gaz.get(cl[2]))):
+        if current_places.get(types_of_gaz.get(cl[2])[i]) < max_all_places.get(types_of_gaz.get(cl[2])[i]):
+            if mi == -1:
+
+                mi = current_places.get(types_of_gaz.get(cl[2])[i])
+                changed_azs = types_of_gaz.get(cl[2])[i]
+            else:
+                if current_places.get(types_of_gaz.get(cl[2])[i]) < mi:
+                    mi = current_places.get(types_of_gaz.get(cl[2])[i])
+                    changed_azs = types_of_gaz.get(cl[2])[i]
+    if changed_azs>0:
+        current_places[changed_azs]+=1
+    if changed_azs==-1:
+        print('Не нашел места В {}:{} '.format(str(time//60),str(time-(time//60)*60),cl[2]),current_places.values())
+        table(current_places,max_all_places,types_of_gaz)
+        continue
+    refill_time = int((int(cl[1])-1)//10) + 1 + int(random.randint(-1, 1))
+    if refill_time == 0:
+        refill_time = 1
+    future_time = 0
+    for f in range(len(future_leaving)):
+        if future_leaving[len(future_leaving)-f-1][5] == changed_azs:
+            future_time = future_leaving[len(future_leaving)-f-1][0] + refill_time
+            break
+    if future_time == 0:
+        future_time = time+refill_time
+
+    print('В {}:{} на азс№{}'.format(str(time//60),str(time-(time//60)*60), str(changed_azs)))
+    table(current_places,max_all_places,types_of_gaz)
+
+    future_leaving.append([future_time, time, cl[2],int(cl[1]), refill_time, changed_azs])
+
+
+#Вся необходимая информация о клиенте добавляется(удаляется) через future_leaving,
+#Время считается в минутах начиная с 00:00
+#TODO: (Sveta) Количество литров, проданное за сутки по каждой марке бензина;
+#              Общая сумма продаж за сутки;
+#              Количество клиентов, которые покинули АЗС не заправив автомобиль из-за «скопившейся» очереди.
+#TODO: (Vova) Подкоректировать вывод, чтобы как на hellopython было(+время в формате чч:мм) + PEP8 + коментарии
+

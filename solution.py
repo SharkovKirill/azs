@@ -1,5 +1,7 @@
 """
 Developers: Vladimir Ermolenko: 30%
+            Sharkov Kirill - 75%
+            Svetlana Keda - 25%
 
 
 """
@@ -27,10 +29,6 @@ for i in range(len(max_all_places)):
 with open('input.txt', encoding='utf-8') as clients:
     lst_clients = clients.readlines()
 
-# print(current_places)
-# print(max_all_places)
-# print(types_of_gaz)
-# print(list(types_of_gaz))
 future_leaving = []
 aazz = {}
 cost = {}
@@ -217,15 +215,10 @@ for client in range(len(lst_clients)):
 
 
 print('Количество литров АИ-80, проданного за сутки: ', aazz.get('АИ-80'), '\n'
-                                                                           'Количество литров АИ-92, проданного за '
-                                                                           'сутки: ',
-      aazz.get('АИ-92'), '\n'
-                         'Количество литров АИ-98, проданного за сутки: ', aazz.get('АИ-98'), '\n'
-                                                                                              'Количество литров АИ-95,'
-                                                                                              ' проданного за сутки: ',
-      aazz.get('АИ-95'), '\n')
+      'Количество литров АИ-92, проданного за сутки: ', aazz.get('АИ-92'), '\n'                                                                
+      'Количество литров АИ-98, проданного за сутки: ', aazz.get('АИ-98'), '\n'
+      'Количество литров АИ-95, проданного за сутки: ', aazz.get('АИ-95'), '\n')
+
 print('Общая сумма продаж за сутки: ', int(allcost))
 print('Количество машин, покинувших АЗС: ', left_azs)
-# Вся необходимая информация о клиенте добавляется(удаляется) через future_leaving,
-# Время считается в минутах начиная с 00:00
 

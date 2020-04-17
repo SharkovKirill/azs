@@ -24,15 +24,13 @@ current_places = {}
 for i in range(len(max_all_places)):
    current_places[i+1] = 0
 
-
-
 with open('input.txt', encoding='utf-8') as clients:
     lst_clients = clients.readlines()
 
-print(current_places)
-print(max_all_places)
-print(types_of_gaz)
-print(list(types_of_gaz))
+#print(current_places)
+#print(max_all_places)
+#print(types_of_gaz)
+#print(list(types_of_gaz))
 future_leaving = []
 aazz = {}
 cost = {}
@@ -43,18 +41,24 @@ cost['АИ-95'] = 44.55
 cost['АИ-98'] = 49.66
 
 
-
 def table(current_places,max_all_places,types_of_gaz):
     for i in range(1,len(current_places)+1):
         az=''
         for key in types_of_gaz.keys():
             if i in types_of_gaz.get(key):
                 az = az + ' ' + key
-        print('Автомат №{}  максимальная очередь: {} Марки бензина: {}'.format(i, max_all_places.get(i), az))
-
+        print('Автомат №{}  максимальная очередь: {} Марки бензина: {} ->'.format(i, max_all_places.get(i), az),
+              '*'*list(current_places.values())[i-1],sep='')
+    print()
+k = 0
+left_azs = 0
 for client in range(len(lst_clients)):
     cl = lst_clients[client].split()
-    time = int(cl[0][1:2])*60 + int(cl[0][4:5])
+    if k == 0:
+        time = int(cl[0][1:3])*60 + int(cl[0][4:6])
+        k = 1
+    else:
+        time = int(cl[0][0:2])*60 + int(cl[0][3:5])
 
     if len(future_leaving) > 0:
         try:
@@ -84,7 +88,7 @@ for client in range(len(lst_clients)):
                 if current_places.get(types_of_gaz.get(cl[2])[i]) < mi:
                     mi = current_places.get(types_of_gaz.get(cl[2])[i])
                     changed_azs = types_of_gaz.get(cl[2])[i]
-    left_azs = 0
+
     if changed_azs>0:
         current_places[changed_azs]+=1
     if changed_azs==-1:
@@ -119,8 +123,8 @@ for client in range(len(lst_clients)):
     if cl[2] == 'АИ-98':
         allcost += int(cl[1]) * cost.get(cl[2])
 
-
     future_leaving.append([future_time, time, cl[2],int(cl[1]), refill_time, changed_azs])
+
 
 print('Количество литров АИ-80, проданного за сутки: ', aazz.get('АИ-80'), '\n'
       'Количество литров АИ-92, проданного за сутки: ', aazz.get('АИ-92'), '\n'
@@ -130,8 +134,6 @@ print('Общая сумма продаж за сутки: ', int(allcost))
 print('Количество машин, покинувших АЗС: ', left_azs)
 #Вся необходимая информация о клиенте добавляется(удаляется) через future_leaving,
 #Время считается в минутах начиная с 00:00
-#TODO: (Sveta) Количество литров, проданное за сутки по каждой марке бензина;
-#              Общая сумма продаж за сутки;
-#              Количество клиентов, которые покинули АЗС не заправив автомобиль из-за «скопившейся» очереди.
+
 #TODO: (Vova) Подкоректировать вывод, чтобы как на hellopython было(+время в формате чч:мм) + PEP8 + коментарии
 

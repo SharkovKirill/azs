@@ -1,5 +1,5 @@
 """
-Developers: Vladimir Ermolenko:
+Developers: Vladimir Ermolenko: 30%
 
 
 """
@@ -143,7 +143,6 @@ for client in range(len(lst_clients)):
         except:
             pass
 
-
     # для проверки прохождения for на первый раз
     mi = -1
     changed_azs = -1
@@ -192,7 +191,12 @@ for client in range(len(lst_clients)):
             fp1 = 'В {}:{} новый клиент: {}:{}'.format(str(time // 60), str(time - (time // 60) * 60),
                                                        str(time // 60), str(time - (time // 60) * 60))
 
-    print(fp1 + ' встал в очередь к автомату №{}'.format(str(changed_azs)))
+    try:
+        print(fp1 + ' {} {} {} встал в очередь к автомату №{}'.format(str(future_leaving[0][2]),
+                                                                      str(future_leaving[0][3]),
+                                                                      str(future_leaving[0][4]), str(changed_azs)))
+    except:
+        print(fp1 + ' встал в очередь к автомату №{}'.format(str(changed_azs)))
 
     table(current_places, max_all_places, types_of_gaz)
     if cl[2] not in aazz.keys():
@@ -224,3 +228,4 @@ print('Общая сумма продаж за сутки: ', int(allcost))
 print('Количество машин, покинувших АЗС: ', left_azs)
 # Вся необходимая информация о клиенте добавляется(удаляется) через future_leaving,
 # Время считается в минутах начиная с 00:00
+

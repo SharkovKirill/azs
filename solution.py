@@ -1,6 +1,6 @@
 """
 Developers: Vladimir Ermolenko: 30%
-            Sharkov Kirill - 75%
+            Sharkov Kirill - 70%
             Svetlana Keda - 25%
 
 
